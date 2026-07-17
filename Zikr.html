@@ -51,10 +51,10 @@
         </p>
         
         <div class="mt-5 flex justify-center gap-4">
-            <button onclick="changerOnglet('accueil')" id="btn-onglet-accueil" class="bg-stone-800 hover:bg-stone-700 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-stone-700 tracking-wider">
+            <button onclick="changerOnglet('accueil')" id="btn-onglet-accueil" class="bg-amber-600 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-amber-500 tracking-wider">
                 <i class="fas fa-home me-1.5"></i> ACCUEIL
             </button>
-            <button onclick="changerOnglet('compteurs')" id="btn-onglet-compteurs" class="bg-amber-600 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-amber-500 tracking-wider">
+            <button onclick="changerOnglet('compteurs')" id="btn-onglet-compteurs" class="bg-stone-800 hover:bg-stone-700 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-stone-700 tracking-wider">
                 <i class="fas fa-beads me-1.5"></i> COMPTEURS
             </button>
             <button onclick="ouvrirAjouterZikr()" id="btn-admin-ajout" class="hidden bg-emerald-700 hover:bg-emerald-600 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-emerald-600 shadow-md tracking-wider">
@@ -63,31 +63,34 @@
         </div>
     </header>
 
-    <section id="section-accueil" class="container mx-auto px-4 py-10 max-w-4xl flex-grow hidden">
-        <div class="bg-white rounded-3xl border border-amber-500/20 shadow-xl overflow-hidden p-8 text-center border-t-4 border-t-amber-700">
-            <div class="inline-block p-2 bg-stone-50 rounded-2xl border border-amber-500/30 shadow-md mb-6">
-                <img src="photo-magal.jpeg" alt="Cheikh Ahmadou Bamba" class="max-h-80 md:max-h-[380px] rounded-xl object-contain mx-auto">
+    <section id="section-accueil" class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+        <div class="bg-white rounded-3xl border border-amber-500/20 shadow-xl overflow-hidden p-6 md:p-10 text-center border-t-4 border-t-amber-700">
+            
+            <div class="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-amber-500/30 shadow-lg mb-8 bg-stone-100">
+                <img src="photo-magal.jpeg" alt="Cheikh Ahmadou Bamba" class="w-full h-auto max-h-[500px] object-cover block mx-auto">
             </div>
             
-            <h2 class="text-2xl md:text-4xl font-serif font-bold text-stone-900 mb-3 tracking-wide">GRAND MAGAL DE TOUBA</h2>
-            <div class="w-20 h-0.5 bg-amber-600 mx-auto mb-5"></div>
+            <h2 class="text-3xl md:text-5xl font-serif font-extrabold text-stone-900 mb-4 tracking-wide">
+                GRAND MAGAL DE TOUBA
+            </h2>
+            <div class="w-24 h-1 bg-amber-600 mx-auto mb-6"></div>
             
-            <p class="text-lg md:text-xl font-bold text-emerald-800 tracking-widest uppercase bg-stone-50 inline-block px-6 py-2.5 rounded-xl border border-amber-500/20 shadow-inner">
+            <p class="text-xl md:text-2xl font-black text-emerald-800 tracking-widest uppercase bg-emerald-50 inline-block px-8 py-3 rounded-xl border-2 border-emerald-600/20 shadow-sm mb-3">
                 Dimanche 2 Août 2026
             </p>
-            <p class="text-stone-400 font-semibold italic mt-2 text-xs md:text-sm">Correspondant au 18 Safar 1448 H.</p>
+            <p class="text-stone-500 font-bold italic text-sm md:text-base mb-8">Correspondant au 18 Safar 1448 H.</p>
             
-            <div class="mt-8 p-5 bg-amber-50/40 rounded-xl border border-amber-500/10 text-sm md:text-base text-stone-800 font-medium max-w-2xl mx-auto italic leading-relaxed">
+            <div class="p-6 md:p-8 bg-amber-50/60 rounded-2xl border border-amber-500/20 text-base md:text-xl text-stone-900 font-semibold max-w-2xl mx-auto italic leading-relaxed shadow-inner">
                 « Ô mon Seigneur ! Accorde-moi une rétribution telle que chacun de mes écrits puisse guider et éclairer les cœurs pour l'éternité. »
             </div>
             
-            <button onclick="changerOnglet('compteurs')" class="mt-8 bg-stone-900 text-amber-100 hover:bg-stone-800 font-bold py-3.5 px-8 rounded-xl shadow-lg transition-all tracking-widest text-xs border border-stone-700 uppercase">
+            <button onclick="changerOnglet('compteurs')" class="mt-8 bg-stone-900 text-amber-100 hover:bg-stone-800 font-bold py-4 px-10 rounded-xl shadow-lg transition-all tracking-widest text-sm border border-stone-700 uppercase">
                 Accéder aux compteurs <i class="fas fa-arrow-right ms-2"></i>
             </button>
         </div>
     </section>
 
-    <main id="section-compteurs" class="container mx-auto px-4 py-10 flex-grow max-w-7xl">
+    <main id="section-compteurs" class="container mx-auto px-4 py-10 flex-grow max-w-7xl hidden">
         <div id="zikr-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
     </main>
@@ -119,7 +122,6 @@
     </div>
 
     <script>
-        // Liste officielle ordonnée des 10 Zikrs
         const zikrsParDefaut = [
             { id: 1, nom: "Astaghfiroullah", texte: "<span class='arabic-text text-3xl font-bold text-emerald-800 block text-center' dir='rtl'>أَسْتَغْفِرُ اللَّهَ</span>", compteur: 0 },
             { id: 2, nom: "Soubhanallah", texte: "<span class='arabic-text text-3xl font-bold text-emerald-800 block text-center' dir='rtl'>سُبْحَانَ اللَّهِ</span><hr class='my-2.5 border-stone-100'><p class='text-xs text-stone-500 text-center italic font-semibold'>(« Gloire à Allah »)</p>", compteur: 0 },
@@ -131,45 +133,42 @@
             {
                 id: 8,
                 nom: "Salat de Khadimou Rassoul",
-                texte: "<div class='custom-scroll max-h-60 overflow-y-auto px-1'><span class='arabic-text text-xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ بِحَقِّ وَجْهِكَ الْكَرِيمِ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَىٰ سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَهَبْ لِشَيْخِنَا أَحْمَدَ ابْنِ مُحَمَّدٍ ابْنِ حَبِيبِ اللَّهِ مَانوَاهُ لِنَفْسِهِ وَلِأُمَّةِ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَبَارِك. مَانوَاهُ الشَّيْخُ أَحْمَدُ ابْنُ مُحَمَّدٍ اللَّهُمَّ يَا مُجِيبَ يَا رَبَّ الْعَالَمِينَ إِنَّكَ أَنْتَ الْوَهَّابُ ...<br>سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ وَسَلَامٌ عَلَى الْمُرْسَلِينَ وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahir Rahmanir Rahim. Allahumma bihaqqi wajhikal karīmi salli wa sallim wa bārik alā sayyidinā wa mawlānā Muhammadin wa alā ālihī wa sahbihī wa hab lishaykhinā Ahmada-bni Muhammadin-ibni Habībillāhi mā nawāhu linafsihī wa li-ummati Rasūlillāhi sallallāhu alayhi wa sallama wa bārik mā nawāhush-shaykhu Ahmadu-bnu Muhammadin. Allahumma yā Mujību yā Rabbal ālamīna innaka Antal Wahhāb. Subhāna Rabbika Rabbil izzati ammā yasifūna wa salāmun alal mursalīna walhamdu lillāhi Rabbil ālamīn.</p></div>",
+                texte: "<div class='custom-scroll max-h-60 overflow-y-auto px-1'><span class='arabic-text text-xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ بِحَقِّ وَجْهِكَ الْكَرِيمِ صَلِّ وَسَلِّmْ وَبَارِكْ عَلَىٰ سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَهَبْ لِشَيْخِنَا أَحْمَدَ ابْنِ مُحَمَّدٍ ابْنِ حَبِيبِ اللَّهِ mَانوَاهُ لِنَفْسِهِ وَlِأُمَّةِ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّmَ وَبَارِك. mَانوَاهُ الشَّيْخُ أَحْمَدُ ابْنُ مُحَمَّدٍ اللَّهُمَّ يَا mُجِيبَ يَا رَبَّ الْعَالَمِينَ إِنَّكَ أَنْتَ الْوَهَّابُ ...<br>سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ وَسَلَامٌ عَلَى الْمُرْسَلِينَ وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahir Rahmanir Rahim. Allahumma bihaqqi wajhikal karīmi salli wa sallim wa bārik alā sayyidinā wa mawlānā Muhammadin wa alā ālihī wa sahbihī wa hab lishaykhinā Ahmada-bni Muhammadin-ibni Habībillāhi mā nawāhu linafsihī wa li-ummati Rasūlillāhi sallallāhu alayhi wa sallama wa bārik mā nawāhush-shaykhu Ahmadu-bnu Muhammadin. Allahumma yā Mujību yā Rabbal ālamīna innaka Antal Wahhāb. Subhāna Rabbika Rabbil izzati ammā yasifūna wa salāmun alal mursalīna walhamdu lillāhi Rabbil ālamīn.</p></div>",
                 compteur: 0
             },
             { 
                 id: 9, 
                 nom: "Salatoul Fatiha", 
-                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَىٰ آلِهِ حَقَّ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahirahmanirahim. Allahumma salli ala sayyidina Muhammadin al fatihi lima ughliq wal khatimi lima sabaq nasil haq bil haq wal hadi ila shiratikal mustaqim wa ala alihi haq qadri wa miqdarihi azim.</p></div>", 
+                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُ商تَقِيمِ وَعَلَىٰ آلِهِ حَقَّ قَدْرِهِ وَmِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahirahmanirahim. Allahumma salli ala sayyidina Muhammadin al fatihi lima ughliq wal khatimi lima sabaq nasil haq bil haq wal hadi ila shiratikal mustaqim wa ala alihi haq qadri wa miqdarihi azim.</p></div>", 
                 compteur: 0 
             },
             { 
                 id: 10, 
                 nom: "Salatoul Oumiyi", 
-                texte: "<span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ النَّبِيِّ الْأُمِّيِّ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّمْ تَسْلِيمًا</span><hr class='my-2.5 border-stone-100'><p class='text-xs text-stone-600 text-left italic font-medium font-sans'>Allahumma salli ala sayyidina Muhammad nabi ummi wa ala alihi wa sahbihi wa sallim taslima.</p>", 
+                texte: "<span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ النَّبِيِّ الْأُمِّيِّ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّmْ تَسْلِيمًا</span><hr class='my-2.5 border-stone-100'><p class='text-xs text-stone-600 text-left italic font-medium font-sans'>Allahumma salli ala sayyidina Muhammad nabi ummi wa ala alihi wa sahbihi wa sallim taslima.</p>", 
                 compteur: 0 
             }
         ];
 
-        // Clé unique pour isoler le stockage de cette version épurée
-        const STORAGE_KEY = 'zikrs_v10_premium';
+        const STORAGE_KEY = 'zikrs_v11_final_stable';
         let zikrs = JSON.parse(localStorage.getItem(STORAGE_KEY));
         let modeAdminActif = false;
         let clicsTitre = 0;
 
-        if (!zikrs || zikrs.length < 10) {
+        if (!zikrs || zikrs.length === 0) {
             zikrs = zikrsParDefaut;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(zikrs));
         }
 
-        // Sécurité : Cliquer 3 fois de suite rapidement sur le grand titre pour passer Admin
         function activerCodeSecret() {
             clicsTitre++;
             if (clicsTitre === 3) {
                 modeAdminActif = true;
                 document.getElementById('btn-admin-ajout').classList.remove('hidden');
-                afficherZikrs(); // Recharge les cartes pour faire apparaître les poubelles
-                alert("🔒 Mode Administrateur activé ! Vous pouvez maintenant ajouter ou supprimer des zikrs.");
+                afficherZikrs();
+                alert("🔒 Mode Admin activé !");
                 clicsTitre = 0;
             }
-            // Réinitialise le compteur après 2 secondes si pas de clics
             setTimeout(() => { clicsTitre = 0; }, 2000);
         }
 
@@ -209,27 +208,21 @@
                         <button onclick="supprimerZikr(${zikr.id})" class="${modeAdminActif ? '' : 'hidden'} absolute top-3.5 right-3.5 text-stone-300 hover:text-red-600 transition-all text-xs p-1">
                             <i class="fas fa-trash"></i>
                         </button>
-                        
                         <h2 class="text-sm font-extrabold text-stone-900 text-center mb-4 border-b border-stone-100 pb-2 tracking-wider uppercase">${zikr.nom}</h2>
-                        
                         <div class="bg-stone-50/70 p-4 rounded-xl border border-stone-100 shadow-inner">
                             ${zikr.texte}
                         </div>
                     </div>
-
                     <div class="my-6 w-full text-center">
                         <span class="text-5xl font-black text-stone-900 tracking-wider">${zikr.compteur.toLocaleString()}</span>
                     </div>
-
                     <div class="flex items-center space-x-3 w-full justify-center">
-                        <button onclick="reinitialiserCompteur(${zikr.id})" class="w-12 h-12 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all border border-stone-200" title="Remettre à 0 ce compteur">
+                        <button onclick="reinitialiserCompteur(${zikr.id})" class="w-12 h-12 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all border border-stone-200" title="Remettre à 0 uniquement ce compteur">
                             <i class="fas fa-undo-alt"></i>
                         </button>
-                        
                         <button onclick="incrementer(${zikr.id})" class="flex-grow h-12 bg-emerald-700 hover:bg-emerald-600 active:scale-[0.98] text-white rounded-xl flex items-center justify-center font-extrabold text-base shadow-md transition-all tracking-widest border-b-4 border-emerald-900">
                             + 1
                         </button>
-                        
                         <button onclick="decrementer(${zikr.id})" class="w-12 h-12 bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-600 rounded-xl flex items-center justify-center font-bold text-sm shadow-sm transition-all border border-stone-200" title="Retirer 1">
                             -1
                         </button>
@@ -241,35 +234,26 @@
 
         function incrementer(id) {
             const zikr = zikrs.find(z => z.id === id);
-            if (zikr) {
-                zikr.compteur += 1;
-                sauvegarder();
-            }
+            if (zikr) { zikr.compteur += 1; sauvegarder(); }
         }
 
         function decrementer(id) {
             const zikr = zikrs.find(z => z.id === id);
-            if (zikr && zikr.compteur > 0) {
-                zikr.compteur -= 1;
-                sauvegarder();
-            }
+            if (zikr && zikr.compteur > 0) { zikr.compteur -= 1; sauvegarder(); }
         }
 
-        // Fonction de remise à zéro unique par compteur
+        // CORRECTION : Remet à zéro STRICTEMENT le zikr sélectionné sans toucher aucun autre zikr
         function reinitialiserCompteur(id) {
-            const zikr = zikrs.find(z => z.id === id);
-            if (zikr) {
-                if (confirm(`Voulez-vous remettre à 0 uniquement le compteur de : "${zikr.nom}" ?`)) {
-                    zikr.compteur = 0;
+            const index = zikrs.findIndex(z => z.id === id);
+            if (index !== -1) {
+                if (confirm(`Voulez-vous remettre à 0 uniquement le compteur de : "${zikrs[index].nom}" ?`)) {
+                    zikrs[index].compteur = 0;
                     sauvegarder();
                 }
             }
         }
 
-        function ouvrirAjouterZikr() {
-            document.getElementById('modal-ajout').style.display = 'flex';
-        }
-
+        function ouvrirAjouterZikr() { document.getElementById('modal-ajout').style.display = 'flex'; }
         function fermerAjouterZikr() {
             document.getElementById('modal-ajout').style.display = 'none';
             document.getElementById('nouveau-nom').value = '';
@@ -279,36 +263,22 @@
         function confirmerAjouterZikr() {
             const nom = document.getElementById('nouveau-nom').value.trim();
             const texteSaisi = document.getElementById('nouveau-texte').value.trim();
-
-            if (!nom) {
-                alert("Veuillez renseigner un nom.");
-                return;
-            }
+            if (!nom) { alert("Veuillez renseigner un nom."); return; }
 
             const texteFormate = `<span class='arabic-text text-xl font-bold text-stone-900 block text-center' dir='rtl'>${texteSaisi.replace(/\n/g, '<br>')}</span>`;
-
-            const nouveauZikr = {
-                id: Date.now(),
-                nom: nom,
-                texte: texteSaisi ? texteFormate : "Pas de description",
-                compteur: 0
-            };
-
-            zikrs.push(nouveauZikr);
+            zikrs.push({ id: Date.now(), nom: nom, texte: texteSaisi ? texteFormate : "Pas de description", compteur: 0 });
             sauvegarder();
             fermerAjouterZikr();
             changerOnglet('compteurs');
         }
 
         function supprimerZikr(id) {
-            const zikr = zikrs.find(z => z.id === id);
-            if (confirm(`Êtes-vous sûr de vouloir supprimer définitivement le zikr "${zikr.nom}" ?`)) {
+            if (confirm("Supprimer définitivement ce zikr ?")) {
                 zikrs = zikrs.filter(z => z.id !== id);
                 sauvegarder();
             }
         }
 
-        // Initialisation de la vue
         afficherZikrs();
     </script>
 </body>
