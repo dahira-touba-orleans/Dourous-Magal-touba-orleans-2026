@@ -106,22 +106,23 @@
             </h3>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">Nom du Zikr (en français)</label>
-                    <input type="text" id="nouveau-nom" class="w-full border border-stone-200 rounded-xl p-3 text-sm focus:border-amber-500 outline-none transition-all font-medium" placeholder="Ex: Soubhanallah">
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">Nom du Zikr</label>
+                    <input type="text" id="nouveau-nom" class="w-full border border-stone-200 rounded-xl p-3 text-sm focus:border-amber-500 outline-none" placeholder="Ex: Soubhanallah">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">Texte complet / Description (Arabe ou Français)</label>
-                    <textarea id="nouveau-texte" class="w-full border border-stone-200 rounded-xl p-3 text-sm focus:border-amber-500 outline-none h-32 custom-scroll transition-all font-medium" placeholder="Collez le texte sacré ici..."></textarea>
+                    <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">Texte / Description</label>
+                    <textarea id="nouveau-texte" class="w-full border border-stone-200 rounded-xl p-3 text-sm focus:border-amber-500 outline-none h-32 custom-scroll" placeholder="Collez le texte ici..."></textarea>
                 </div>
             </div>
             <div class="flex justify-end space-x-3 mt-6">
-                <button onclick="fermerAjouterZikr()" class="px-4 py-2 text-xs font-bold text-stone-500 hover:text-stone-800 uppercase tracking-wider">Annuler</button>
-                <button onclick="confirmerAjouterZikr()" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-md uppercase tracking-wider">Confirmer</button>
+                <button onclick="fermerAjouterZikr()" class="px-4 py-2 text-xs font-bold text-stone-500 hover:text-stone-800 uppercase">Annuler</button>
+                <button onclick="confirmerAjouterZikr()" class="px-5 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-md uppercase">Confirmer</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Textes et traductions vérifiés, aucune faute ni lettre coupée
         const zikrsParDefaut = [
             { id: 1, nom: "Astaghfiroullah", texte: "<span class='arabic-text text-3xl font-bold text-emerald-800 block text-center' dir='rtl'>أَسْتَغْفِرُ اللَّهَ</span>", compteur: 0 },
             { id: 2, nom: "Soubhanallah", texte: "<span class='arabic-text text-3xl font-bold text-emerald-800 block text-center' dir='rtl'>سُبْحَانَ اللَّهِ</span><hr class='my-2.5 border-stone-100'><p class='text-xs text-stone-500 text-center italic font-semibold'>(« Gloire à Allah »)</p>", compteur: 0 },
@@ -133,24 +134,24 @@
             {
                 id: 8,
                 nom: "Salat de Khadimou Rassoul",
-                texte: "<div class='custom-scroll max-h-60 overflow-y-auto px-1'><span class='arabic-text text-xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ بِحَقِّ وَجْهِكَ الْكَرِيمِ صَلِّ وَسَلِّmْ وَبَارِكْ عَلَىٰ سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَهَبْ لِشَيْخِنَا أَحْمَدَ ابْنِ مُحَمَّدٍ ابْنِ حَبِيبِ اللَّهِ mَانوَاهُ لِنَفْسِهِ وَlِأُمَّةِ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّmَ وَبَارِك. mَانوَاهُ الشَّيْخُ أَحْمَدُ ابْنُ مُحَمَّدٍ اللَّهُمَّ يَا mُجِيبَ يَا رَبَّ الْعَالَمِينَ إِنَّكَ أَنْتَ الْوَهَّابُ ...<br>سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ وَسَلَامٌ عَلَى الْمُرْسَلِينَ وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahir Rahmanir Rahim. Allahumma bihaqqi wajhikal karīmi salli wa sallim wa bārik alā sayyidinā wa mawlānā Muhammadin wa alā ālihī wa sahbihī wa hab lishaykhinā Ahmada-bni Muhammadin-ibni Habībillāhi mā nawāhu linafsihī wa li-ummati Rasūlillāhi sallallāhu alayhi wa sallama wa bārik mā nawāhush-shaykhu Ahmadu-bnu Muhammadin. Allahumma yā Mujību yā Rabbal ālamīna innaka Antal Wahhāb. Subhāna Rabbika Rabbil izzati ammā yasifūna wa salāmun alal mursalīna walhamdu lillāhi Rabbil ālamīn.</p></div>",
+                texte: "<div class='custom-scroll max-h-60 overflow-y-auto px-1'><span class='arabic-text text-xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ بِحَقِّ وَجْهِكَ الْكَرِيمِ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَىٰ سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَهَبْ لِشَيْخِنَا أَحْمَدَ ابْنِ مُحَمَّدٍ ابْنِ حَبِيبِ اللَّهِ مَا نَوَاهُ لِنَفْسِهِ وَلِأُمَّةِ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَبَارِكْ مَا نَوَاهُ الشَّيْخُ أَحْمَدُ ابْنُ مُحَمَّدٍ اللَّهُمَّ يَا مُجِيبَ يَا رَبَّ الْعَالَمِينَ إِنَّكَ أَنْتَ الْوَهَّابُ ...<br>سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ وَسَلَامٌ عَلَى الْمُرْسَلِينَ وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahir Rahmanir Rahim. Allahumma bihaqqi wajhikal karīmi salli wa sallim wa bārik alā sayyidinā wa mawlānā Muhammadin wa alā ālihī wa sahbihī wa hab lishaykhinā Ahmada-bni Muhammadin-ibni Habībillāhi mā nawāhu linafsihī wa li-ummati Rasūlillāhi sallallāhu alayhi wa sallama wa bārik mā nawāhush-shaykhu Ahmadu-bnu Muhammadin. Allahumma yā Mujību yā Rabbal ālamīna innaka Antal Wahhāb. Subhāna Rabbika Rabbil izzati ammā yasifūna wa salāmun alal mursalīna walhamdu lillāhi Rabbil ālamīn.</p></div>",
                 compteur: 0
             },
             { 
                 id: 9, 
                 nom: "Salatoul Fatiha", 
-                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُ商تَقِيمِ وَعَلَىٰ آلِهِ حَقَّ قَدْرِهِ وَmِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahirahmanirahim. Allahumma salli ala sayyidina Muhammadin al fatihi lima ughliq wal khatimi lima sabaq nasil haq bil haq wal hadi ila shiratikal mustaqim wa ala alihi haq qadri wa miqdarihi azim.</p></div>", 
+                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَىٰ آلِهِ حَقَّ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-stone-100'><p class='text-[11px] text-stone-600 text-left italic leading-relaxed font-medium font-sans'>Bismillahirahmanirahim. Allahumma salli ala sayyidina Muhammadin al fatihi lima ughliq wal khatimi lima sabaq nasil haq bil haq wal hadi ila shiratikal mustaqim wa ala alihi haq qadri wa miqdarihi azim.</p></div>", 
                 compteur: 0 
             },
             { 
                 id: 10, 
                 nom: "Salatoul Oumiyi", 
-                texte: "<span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ النَّبِيِّ الْأُمِّيِّ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّmْ تَسْلِيمًا</span><hr class='my-2.5 border-stone-100'><p class='text-xs text-stone-600 text-left italic font-medium font-sans'>Allahumma salli ala sayyidina Muhammad nabi ummi wa ala alihi wa sahbihi wa sallim taslima.</p>", 
+                texte: "<span class='arabic-text text-2xl font-bold text-stone-900 block text-center mb-3 leading-relaxed' dir='rtl'>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ النَّبِيِّ الْأُمِّيِّ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّمْ تَسْلِيمًا</span><hr class='my-2.5 border-stone-100'><p class='text-xs text-stone-600 text-left italic font-medium font-sans'>Allahumma salli ala sayyidina Muhammad nabi ummi wa ala alihi wa sahbihi wa sallim taslima.</p>", 
                 compteur: 0 
             }
         ];
 
-        const STORAGE_KEY = 'zikrs_v11_final_stable';
+        const STORAGE_KEY = 'zikrs_v12_stable';
         let zikrs = JSON.parse(localStorage.getItem(STORAGE_KEY));
         let modeAdminActif = false;
         let clicsTitre = 0;
@@ -242,7 +243,6 @@
             if (zikr && zikr.compteur > 0) { zikr.compteur -= 1; sauvegarder(); }
         }
 
-        // CORRECTION : Remet à zéro STRICTEMENT le zikr sélectionné sans toucher aucun autre zikr
         function reinitialiserCompteur(id) {
             const index = zikrs.findIndex(z => z.id === id);
             if (index !== -1) {
