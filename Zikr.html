@@ -34,7 +34,7 @@
             box-shadow: 0 20px 35px -10px rgba(184, 134, 11, 0.25);
             border-color: #854d0e !important;
         }
-        /* Page d'accueil : Filtre adouci (0.25 au lieu de 0.65) pour rendre la photo très visible */
+        /* Page d'accueil : Filtre adouci pour rendre la photo très visible */
         .bg-accueil-pleine-page {
             background: linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url('photo-magal.jpeg') !important;
             background-size: cover !important;
@@ -99,7 +99,18 @@
         </div>
     </section>
 
-    <main id="section-compteurs" class="container mx-auto px-4 py-10 flex-grow max-w-7xl hidden">
+    <main id="section-compteurs" class="container mx-auto px-4 py-8 flex-grow max-w-7xl hidden">
+        
+        <div class="mb-8 max-w-xl mx-auto bg-gradient-to-br from-amber-900 to-amber-950 text-center p-5 rounded-2xl border-2 border-amber-500/50 shadow-xl">
+            <h3 class="text-xs md:text-sm font-black text-amber-300 tracking-widest uppercase mb-1">
+                <i class="fas fa-star me-2"></i> Total Global Salat al-Nabi <i class="fas fa-star ms-2"></i>
+            </h3>
+            <p class="text-[11px] text-amber-200/70 font-semibold uppercase tracking-wider mb-2">Cumul exclusif de toutes les Salats</p>
+            <div id="compteur-global-salat" class="text-4xl md:text-5xl font-black text-white tracking-wider drop-shadow-md">
+                0
+            </div>
+        </div>
+
         <div id="zikr-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             </div>
     </main>
@@ -122,6 +133,10 @@
                     <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1">Texte / Description</label>
                     <textarea id="nouveau-texte" class="w-full border border-amber-200 rounded-xl p-3 text-sm focus:border-amber-500 outline-none h-32 custom-scroll bg-white" placeholder="Collez le texte ici..."></textarea>
                 </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="nouveau-est-salat" class="w-4 h-4 text-amber-700 border-amber-300 rounded focus:ring-amber-500">
+                    <label for="nouveau-est-salat" class="ms-2 text-xs font-bold text-stone-700 uppercase tracking-wider">Ce zikr est une Salat al-Nabi</label>
+                </div>
             </div>
             <div class="flex justify-end space-x-3 mt-6">
                 <button onclick="fermerAjouterZikr()" class="px-4 py-2 text-xs font-bold text-stone-600 hover:text-stone-900 uppercase">Annuler</button>
@@ -131,40 +146,43 @@
     </div>
 
     <script>
-        // Force l'application immédiate de la version marron/beige
-        if (!localStorage.getItem('nettoyage_v106_marron_beige')) {
+        // Force l'application immédiate de la mise à jour finale v1.0.7 avec trads et compteur global
+        if (!localStorage.getItem('nettoyage_v107_global_salat')) {
             localStorage.clear();
-            localStorage.setItem('nettoyage_v106_marron_beige', 'true');
+            localStorage.setItem('nettoyage_v107_global_salat', 'true');
         }
 
         const zikrsParDefaut = [
-            { id: 1, nom: "Soubhanallah", texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>سُبْحَانَ اللَّهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Gloire à Allah »)</p>", compteur: 0 },
-            { id: 2, nom: "Soubhanallahi wa bihamdihi", texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Gloire et louange à Allah »)</p>", compteur: 0 },
-            { id: 3, nom: "La ilaha illa Allahu al-maliku al-haqqu al-mubin", texte: "<span class='arabic-text text-2xl font-bold block text-center' dir='rtl'>لَا إِلَٰهَ إِلَّا اللَّهُ الْمَلِكُ الْحَقُّ الْمُبِينُ</span>", compteur: 0 },
-            { id: 4, nom: "Alhamdoulillah", texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>الْحَمْدُ لِلَّهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Louange à Allah »)</p>", compteur: 0 },
-            { id: 5, nom: "Çallal lahou ala Mouhammad", texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>صَلَّى اللَّهُ عَلَىٰ مُحَمَّدٍ</span>", compteur: 0 },
-            { id: 6, nom: "Astaghfiroullahal 'Azim", texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Je demande pardon à Allah l'Immense »)</p>", compteur: 0 },
+            { id: 1, nom: "Soubhanallah", estSalat: false, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>سُبْحَانَ اللَّهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Gloire à Allah »)</p>", compteur: 0 },
+            { id: 2, nom: "Soubhanallahi wa bihamdihi", estSalat: false, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Gloire et louange à Allah »)</p>", compteur: 0 },
+            { id: 3, nom: "La ilaha illa Allahu al-maliku al-haqqu al-mubin", estSalat: false, texte: "<span class='arabic-text text-2xl font-bold block text-center' dir='rtl'>لَا إِلَٰهَ إِلَّا اللَّهُ الْمَلِكُ الْحَقُw الْمُبِينُ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Il n'y a de divinité d'autre qu'Allah, le Roi, la Vérité Éclatante »)</p>", compteur: 0 },
+            { id: 4, nom: "Alhamdoulillah", estSalat: false, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>الْحَمْدُ لِلَّهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Louange à Allah »)</p>", compteur: 0 },
+            { id: 5, nom: "Çallal lahou ala Mouhammad", estSalat: true, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>صَلَّى اللَّهُ عَلَىٰ مُحَمَّدٍ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Que la paix et les bénédictions d'Allah soient sur Muhammad »)</p>", compteur: 0 },
+            { id: 6, nom: "Astaghfiroullahal 'Azim", estSalat: false, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>أَسْتَغْفِرُ Lَّهَ الْعَظِيمَ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Je demande pardon à Allah l'Immense »)</p>", compteur: 0 },
             {
                 id: 7,
                 nom: "Salat de Khadimou Rassoul",
-                texte: "<div class='custom-scroll max-h-60 overflow-y-auto px-1'><span class='arabic-text text-xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ بِحَقِّ وَجْهِكَ الْكَرِيمِ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَىٰ سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَهَبْ لِشَيْخِنَا أَحْمَدَ ابْنِ مُحَمَّدٍ ابْنِ حَبِيبِ اللَّهِ مَا نَوَاهُ لِنَفْسِهِ وَلِأُمَّةِ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَبَارِكْ مَا نَوَاهُ الشَّيْخُ أَحْمَدُ ابْنِ مُحَمَّدٍ اللَّهُمَّ يَا مُجِيبَ يَا رَبَّ الْعَالَمِينَ إِنَّكَ أَنْتَ الْوَهَّاب...<br>سُبْحَانَ رَبِّكَ رَبِّ الْعِزَّةِ عَمَّا يَصِفُونَ وَسَلَامٌ عَلَى الْمُرْسَلِينَ وَالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</span><hr class='my-2.5 border-amber-200'><p class='text-[11px] text-amber-950 text-left italic leading-relaxed font-bold font-sans bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/50'>Bismillahir Rahmanir Rahim. Allahumma bihaqqi wajhikal karīmi salli wa sallim wa bārik alā sayyidinā wa mawlānā Muhammadin wa alā ālihī wa sahbihī wa hab lishaykhinā Ahmada-bni Muhammadin-ibni Habībillāhi mā nawāhu linafsihī wa li-ummati Rasūlillāhi sallallāhu alayhi wa sallama wa bārik mā nawāhush-shaykhu Ahmadu-bnu Muhammadin. Allahumma yā Mujību yā Rabbal ālamīna innaka Antal Wahhāb. Subhāna Rabbika Rabbil izzati ammā yasifūna wa salāmun alal mursalīna walhamdu lillāhi Rabbil ālamīn.</p></div>",
+                estSalat: true,
+                texte: "<div class='custom-scroll max-h-60 overflow-y-auto px-1'><span class='arabic-text text-xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُم¨ بِحَقِّ وَجْهِكَ الْكَرِيمِ صَلِّ وَسَلِّمْ وَبَارِكْ عَلَىٰ سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَهَبْ Lِشَيْخِنَا أَحْمَدَ ابْنِ مُحَمَّدٍ ابْنِ حَبِيبِ اللَّهِ مَا نَوَاهُ لِنَفْسِهِ وَلِأُمَّةِ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ وَبَارِkْ مَا Nَوَاهُ الشَّيْخُ أَحْمَدُ ابْنِ مُحَمَّدٍ اللَّهُم¨ يَا مُجِيبَ يَا رَب¨ الْعَالَمِينَ إِنَّكَ أَنْتَ الْوَهَّاب...</span><hr class='my-2.5 border-amber-200'><p class='text-[11px] text-amber-950 text-left italic leading-relaxed font-bold font-sans bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/50'>Bismillahir Rahmanir Rahim. Allahumma bihaqqi wajhikal karīmi salli wa sallim wa bārik alā sayyidinā wa mawlānā Muhammadin...</p></div>",
                 compteur: 0
             },
             { 
                 id: 8, 
                 nom: "Salatoul Fatiha", 
-                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَىٰ آلِهِ حَقَّ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-amber-200'><p class='text-[11px] text-amber-950 text-left italic leading-relaxed font-bold font-sans bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/50'>Bismillahirahmanirahim. Allahumma salli ala sayyidina Muhammadin al fatihi lima ughliq wal khatimi lima sabaq nasil haq bil haq wal hadi ila shiratikal mustaqim wa ala alihi haq qadri wa miqdarihi azim.</p></div>", 
+                estSalat: true,
+                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُم¨ صَلِّ عَلَىٰ سَيِّدِنَا مُحَم¨دٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَىٰ آلِهِ حَق¨ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-amber-200'><p class='text-[11px] text-amber-950 text-left italic leading-relaxed font-bold font-sans bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/50'>Bismillahirahmanirahim. Allahumma salli ala sayyidina Muhammadin al fatihi lima ughliq wal khatimi lima sabaq...</p></div>", 
                 compteur: 0 
             },
             { 
                 id: 9, 
                 nom: "Salatoul Oumiyi", 
-                texte: "<span class='arabic-text text-2xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّdٍ النَّبِيِّ الْأُمِّيِّ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّمْ تَسْلِيمًا</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-left italic font-bold font-sans bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/50'>Allahumma salli ala sayyidina Muhammad nabi ummi wa ala alihi wa sahbihi wa sallim taslima.</p>", 
+                estSalat: true,
+                texte: "<span class='arabic-text text-2xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>اللَّهُم¨ صَلِّ عَلَىٰ سَيِّدِنَا مُحَم¨دٍ النَّبِيِّ الْأُمِّيِّ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّمْ تَسْلِيمًا</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-left italic font-bold font-sans bg-amber-100/60 p-2.5 rounded-lg border border-amber-200/50'>Allahumma salli ala sayyidina Muhammad nabi ummi wa ala alihi wa sahbihi wa sallim taslima.<br><span class='text-[11px] opacity-80'>(« Ô Allah, accorde Tes bénédictions à notre seigneur Muhammad, le Prophète illettré »)</span></p>", 
                 compteur: 0 
             }
         ];
 
-        const STORAGE_KEY = 'zikrs_production_marron_v106';
+        const STORAGE_KEY = 'zikrs_production_global_v107';
         let zikrs = JSON.parse(localStorage.getItem(STORAGE_KEY));
         let modeAdminActif = false;
         let clicsTitre = 0;
@@ -191,6 +209,13 @@
             afficherZikrs();
         }
 
+        function calculerTotalSalat() {
+            const total = zikrs
+                .filter(z => z.estSalat === true)
+                .reduce((somme, zikr) => somme + zikr.compteur, 0);
+            document.getElementById('compteur-global-salat').innerText = total.toLocaleString();
+        }
+
         function changerOnglet(onglet) {
             const secAccueil = document.getElementById('section-accueil');
             const secCompteurs = document.getElementById('section-compteurs');
@@ -209,6 +234,7 @@
                 secCompteurs.classList.remove('hidden');
                 btnAccueil.className = "bg-stone-800 hover:bg-stone-700 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-stone-700 tracking-wider";
                 btnCompteurs.className = "bg-amber-600 px-5 py-2 rounded-xl text-xs font-bold transition-all border border-amber-500 tracking-wider";
+                calculerTotalSalat();
             }
         }
 
@@ -246,6 +272,7 @@
                 `;
                 container.appendChild(card);
             });
+            calculerTotalSalat();
         }
 
         function incrementer(id) {
@@ -273,15 +300,17 @@
             document.getElementById('modal-ajout').style.display = 'none';
             document.getElementById('nouveau-nom').value = '';
             document.getElementById('nouveau-texte').value = '';
+            document.getElementById('nouveau-est-salat').checked = false;
         }
 
         function confirmerAjouterZikr() {
             const nom = document.getElementById('nouveau-nom').value.trim();
             const texteSaisi = document.getElementById('nouveau-texte').value.trim();
+            const estSalat = document.getElementById('nouveau-est-salat').checked;
             if (!nom) { alert("Veuillez renseigner un nom."); return; }
 
             const texteFormate = `<span class='arabic-text text-xl font-bold block text-center' dir='rtl'>${texteSaisi.replace(/\n/g, '<br>')}</span>`;
-            zikrs.push({ id: Date.now(), nom: nom, texte: texteSaisi ? texteFormate : "Pas de description", compteur: 0 });
+            zikrs.push({ id: Date.now(), nom: nom, estSalat: estSalat, texte: texteSaisi ? texteFormate : "Pas de description", compteur: 0 });
             sauvegarder();
             fermerAjouterZikr();
             changerOnglet('compteurs');
