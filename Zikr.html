@@ -135,7 +135,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Base de données nettoyée sans aucun N ni caractères bizarres
+        // ARABE NETTOYÉ À 100% SANS "N" NI CARACTÈRE PARASITE
         const zikrsParDefaut = [
             { id: 1, nom: "Soubhanallah", estSalat: false, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>سُبْحَانَ اللَّهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Gloire à Allah »)</p>", compteur: 0 },
             { id: 2, nom: "Soubhanallahi wa bihamdihi", estSalat: false, texte: "<span class='arabic-text text-3xl font-bold block text-center' dir='rtl'>سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</span><hr class='my-2.5 border-amber-200'><p class='text-xs text-amber-950 text-center italic font-bold'>(« Gloire et louange à Allah »)</p>", compteur: 0 },
@@ -170,30 +170,29 @@
         let modeAdminActif = false;
         let clicsTitre = 0;
 
-        // ÉCOUTEUR FIREBASE : FORCE LA MISE À JOUR DES TEXTES
+        // CE BLOC FORCE DÉSORMAIS LA MISE À JOUR DES TEXTES DANS FIREBASE SANS TOUCHER AUX COMPTEURS ACTUELS
         db.ref('zikrs').on('value', (snapshot) => {
             const data = snapshot.val();
-            
-            // On vérifie si les anciennes erreurs (comme un "N") sont encore là dans la base distante
-            let baseAVersionner = false;
-            if (data) {
-                const liste = Object.values(data);
-                const khadim = liste.find(z => z.id === 7 || z.nom.includes("Khadim"));
-                if (khadim && khadim.texte && khadim.texte.includes('وَبَارِكْ مَا نَوَاهُ')) {
-                    // Si le texte contient déjà l'arabe nettoyé, tout va bien
-                    baseAVersionner = false;
-                } else {
-                    // Sinon, c'est l'ancienne version buggée présente sur Firebase, on force la mise à jour
-                    baseAVersionner = true;
-                }
-            }
-
-            if (!data || baseAVersionner) {
-                // Écrase définitivement les textes corrompus sur Firebase par la version propre
+            if (!data) {
                 db.ref('zikrs').set(zikrsParDefaut);
                 zikrs = zikrsParDefaut;
             } else {
-                zikrs = Object.values(data);
+                let listeFirebase = Object.values(data);
+                
+                // On met à jour uniquement les descriptions textuelles pour enlever les bugs sans perdre les chiffres
+                zikrs = zikrsParDefaut.map(defaut => {
+                    const existant = listeFirebase.find(f => f.id === defaut.id || f.nom === defaut.nom);
+                    return {
+                        id: defaut.id,
+                        nom: defaut.nom,
+                        estSalat: defaut.estSalat,
+                        texte: defaut.texte, // On impose le texte propre
+                        compteur: existant ? existant.compteur : 0 // On préserve le score en direct
+                    };
+                });
+                
+                // Envoi immédiat des textes propres vers Firebase
+                db.ref('zikrs').set(zikrs);
             }
             afficherZikrs();
         });
