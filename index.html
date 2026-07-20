@@ -8,101 +8,110 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Cinzel:wght@500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Harmonie stricte et unique extraite directement de la photo */
-            --primary: #7a1f1d;       /* Le marron/bordeaux royal exact de l'affiche */
-            --bg-poster: #ecdcc4;     /* Le beige traditionnel exact de l'affiche */
-            --accent: #dca354;        /* L'or de l'affiche */
-            --primary-light: #f6efe4; 
-            --secondary: #8c6239;     
+            /* COULEURS EXTRAITES EXACTEMENT DE TA PHOTO */
+            --primary: #77231e;       /* Le marron/bordeaux de l'affiche */
+            --bg-poster: #f4ecc2;     /* Le beige exact du fond de l'affiche */
+            --accent: #d49b3f;        /* Le jaune/or de l'affiche */
             --dark: #3a0a08;          
             --success: #2e7d32;       
             --danger: #c62828;        
         }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-poster);
+        html, body {
             margin: 0;
             padding: 0;
-            color: var(--dark);
+            width: 100%;
             height: 100vh;
+            overflow: hidden; /* Supprime définitivement toute barre de défilement globale */
+            background-color: var(--bg-poster);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--dark);
+            box-sizing: border-box;
+        }
+
+        body {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-sizing: border-box;
         }
 
         .header {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             color: #fdfbf7;
-            padding: 12px 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 10px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            border-bottom: 2px solid var(--accent);
+            border-bottom: 3px solid var(--accent);
+            height: 60px;
+            box-sizing: border-box;
         }
 
-        .header h1 { margin: 0; font-size: 1.5rem; font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.5px; }
+        .header h1 { margin: 0; font-size: 1.4rem; font-weight: 700; }
         .header-right { display: flex; align-items: center; gap: 20px; }
 
         .badge-date {
-            background: linear-gradient(135deg, var(--accent), #f3c788);
-            color: var(--primary);
-            padding: 6px 18px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 14px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
-        .menu-nav { display: flex; gap: 10px; }
+        .menu-nav { display: flex; gap: 8px; }
 
         .btn-menu {
-            background-color: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #e2d7c5;
-            padding: 8px 16px;
-            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f4ecc2;
+            padding: 6px 14px;
+            font-size: 0.85rem;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .btn-menu:hover, .btn-menu.active {
             background-color: var(--accent);
             color: var(--primary);
             border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(220, 163, 84, 0.3);
         }
 
         .page-content {
-            flex: 1; width: 100%; height: calc(100vh - 65px); position: relative;
+            flex: 1; 
+            width: 100%; 
+            height: calc(100vh - 60px); 
+            position: relative;
+            box-sizing: border-box;
         }
 
         .view-section {
-            display: none; width: 100%; height: 100%; box-sizing: border-box; padding: 24px;
+            display: none; 
+            width: 100%; 
+            height: 100%; 
+            box-sizing: border-box; 
         }
 
         .view-section.active { display: block; }
 
-        /* DESIGN D'ACCUEIL HARMONISÉ - SANS COUPURE DE COULEUR */
+        /* INTERFACE ACCUEIL : PLEIN ÉCRAN STRICT SANS SCROLL */
         #view-accueil { 
             display: none; 
             background-color: var(--bg-poster); 
-            padding: 0;
             height: 100%;
         }
         #view-accueil.active { display: flex; }
         
         .welcome-grid {
             display: grid;
-            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-columns: 1.1fr 0.9fr;
             width: 100%;
             height: 100%;
         }
@@ -110,72 +119,73 @@
         .welcome-left {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 40px 50px;
+            justify-content: space-between; /* Répartit l'espace sans déborder */
+            padding: 25px 35px;
             box-sizing: border-box;
             background-color: var(--bg-poster);
-            overflow-y: auto;
+            height: 100%;
         }
 
-        /* Utilisation exclusive des couleurs de l'affiche */
         .welcome-arabic-card {
-            background: var(--primary); /* Fond identique au marron de la photo */
-            border: 2px solid var(--accent);
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 12px 30px rgba(122, 31, 29, 0.2);
-            margin-bottom: 25px;
-            color: var(--bg-poster); /* Écrit en beige pour une lisibilité parfaite */
+            background: var(--primary); /* Même marron que la photo */
+            border: 3px solid var(--accent); /* Même or que la photo */
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            color: var(--bg-poster);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-sizing: border-box;
         }
 
-        /* Style de texte calligraphique arabe sublime */
         .welcome-arabic-text {
-            font-family: 'Reem Kufi', serif;
-            font-size: 1.9rem;
-            line-height: 2.2;
+            font-family: 'Amiri', serif;
+            font-size: 1.75rem;
+            line-height: 1.8;
             color: #ffffff;
             text-align: center;
             direction: rtl;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Traduction intégrée élégamment */
         .welcome-translation {
-            margin-top: 25px;
-            padding-top: 22px;
-            border-top: 1px dashed rgba(220, 163, 84, 0.4);
-            font-size: 1.05rem;
-            color: #f6efe4;
-            line-height: 1.6;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(244, 236, 194, 0.3);
+            font-size: 1rem;
+            color: #f4ecc2;
+            line-height: 1.5;
             text-align: center;
             font-style: italic;
-            font-weight: 500;
         }
 
         .welcome-info-card {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             color: white;
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid rgba(220, 163, 84, 0.2);
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid var(--accent);
+            box-sizing: border-box;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .welcome-info-card h2 {
-            margin: 0 0 6px 0;
-            font-family: 'Cinzel', serif;
-            font-size: 1.6rem;
+            margin: 0 0 4px 0;
+            font-size: 1.4rem;
             color: var(--accent);
             font-weight: 700;
         }
 
         .welcome-info-card p {
             margin: 0;
-            font-size: 1.05rem;
-            color: var(--bg-poster);
-            letter-spacing: 0.5px;
+            font-size: 0.95rem;
+            color: #f4ecc2;
         }
 
         .welcome-right {
@@ -184,76 +194,88 @@
             align-items: stretch;
             justify-content: center;
             overflow: hidden;
+            height: 100%;
         }
 
         .pro-poster {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Remplit l'espace sans laisser de bandes vides */
         }
 
-        /* STYLE DES AUTRES SECTIONS MUNICIPALES */
+        /* STRUCUTRE PAGES SECONDAIRES AJUSTÉES POUR ÉVITER LE SCROLL */
         .grid-layout {
-            display: grid; grid-template-columns: 1fr 1.8fr; gap: 20px; height: 100%;
+            display: grid; grid-template-columns: 1fr 1.7fr; gap: 20px; height: 100%; padding: 20px; box-sizing: border-box;
         }
 
         .card-panel {
-            background: #fffbf5; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid #dfd3bf; display: flex; flex-direction: column;
+            background: #ffffff; border-radius: 14px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 2px solid var(--accent); display: flex; flex-direction: column; height: 100%; box-sizing: border-box; overflow: hidden;
         }
 
         .card-panel h2 {
-            margin-top: 0; margin-bottom: 16px; color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 8px; font-family: 'Cinzel', serif; font-size: 1.25rem; font-weight: 700;
+            margin-top: 0; margin-bottom: 15px; color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 6px; font-size: 1.2rem; font-weight: 700;
             display: flex; justify-content: space-between; align-items: center;
         }
 
         .kamil-container {
-            background: var(--primary-light); padding: 18px; border-radius: 12px; border: 1px solid #dfd3bf; display: flex; justify-content: space-between; align-items: center;
+            background: #fffbe6; padding: 15px; border-radius: 10px; border: 1px solid var(--accent); display: flex; justify-content: space-between; align-items: center;
         }
 
-        .kamil-value { font-size: 3.2rem; font-weight: 800; color: var(--primary); }
-        .objectif-chiffre-box { font-size: 1.05rem; color: var(--danger) !important; font-weight: 700 !important; margin-top: 6px; display: block; }
-        .qasaid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-y: auto; padding-right: 5px; flex: 1; }
-        .qasaid-item { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 12px 16px; border-radius: 10px; border: 1px solid #dfd3bf; }
-        .qasaid-item h3 { margin: 0; font-size: 1rem; color: var(--primary); font-weight: 700; }
-        .counter-box { display: flex; align-items: center; gap: 12px; }
-        .score-display { font-size: 1.8rem; font-weight: 700; color: var(--secondary); min-width: 50px; text-align: right; }
+        .kamil-value { font-size: 2.8rem; font-weight: 800; color: var(--primary); }
+        .objectif-chiffre-box { font-size: 0.95rem; color: var(--danger) !important; font-weight: 700 !important; margin-top: 4px; display: block; }
+        
+        .qasaid-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            overflow-y: auto; /* Seule cette sous-grille peut défiler si nécessaire */
+            padding-right: 5px; 
+            flex: 1; 
+        }
+        
+        .qasaid-item { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(212, 155, 63, 0.3); }
+        .qasaid-item h3 { margin: 0; font-size: 0.9rem; color: var(--primary); font-weight: 700; }
+        .counter-box { display: flex; align-items: center; gap: 10px; }
+        .score-display { font-size: 1.6rem; font-weight: 700; color: var(--primary); min-width: 45px; text-align: right; }
 
-        .admin-btn-grid { display: none; gap: 4px; margin-top: 6px; }
-        .btn-mini { border: none; padding: 4px 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; border-radius: 4px; }
-        .btn-mini-saisie { background-color: var(--secondary); color: white; }
+        .admin-btn-grid { display: none; gap: 4px; margin-top: 4px; }
+        .btn-mini { border: none; padding: 3px 6px; font-size: 0.7rem; font-weight: 700; cursor: pointer; border-radius: 3px; }
+        .btn-mini-saisie { background-color: #8c6239; color: white; }
         .btn-mini-obj { background-color: #e2e8f0; color: #4a5568; }
         .btn-mini-delete { background-color: var(--danger); color: white; }
         
-        .btn-action-rep { display: none; color: white; border-radius: 50%; width: 34px; height: 34px; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; border: none; font-weight: bold; }
+        .btn-action-rep { display: none; color: white; border-radius: 50%; width: 30px; height: 30px; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; border: none; font-weight: bold; }
         .btn-rep-plus { background-color: var(--success); }
-        .btn-ajouter-xassida { display: none; background-color: var(--success); color: white; border: none; padding: 8px 16px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; cursor: pointer; }
+        .btn-ajouter-xassida { display: none; background-color: var(--success); color: white; border: none; padding: 6px 12px; font-size: 0.8rem; font-weight: 700; border-radius: 4px; cursor: pointer; }
 
-        .giant-card { background: white; width: 96%; height: 95%; margin: 0 auto; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); border: 1px solid #dfd3bf; padding: 35px 50px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
-        .xassida-title { font-size: 3.5rem; color: var(--primary); margin: 0; font-weight: 800; text-transform: uppercase; border-bottom: 4px solid var(--accent); padding-bottom: 12px; letter-spacing: -1px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin: 20px 0; }
-        .stat-box { background: var(--primary-light); border: 1px solid #dfd3bf; padding: 20px; border-radius: 16px; }
-        .stat-label { font-size: 1.2rem; color: #6e6557; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; }
-        .stat-number { font-size: 5rem; font-weight: 900; color: var(--dark); }
+        /* OPTION GÉANTE */
+        #view-geant { padding: 20px; box-sizing: border-box; }
+        .giant-card { background: white; width: 100%; height: 100%; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 2px solid var(--accent); padding: 30px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
+        .xassida-title { font-size: 3rem; color: var(--primary); margin: 0; font-weight: 800; text-transform: uppercase; border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 15px 0; }
+        .stat-box { background: #fffbe6; border: 1px solid var(--accent); padding: 15px; border-radius: 12px; }
+        .stat-label { font-size: 1.1rem; color: #6e6557; font-weight: 600; margin-bottom: 4px; text-transform: uppercase; }
+        .stat-number { font-size: 4rem; font-weight: 900; color: var(--primary); }
         .stat-box.reste-box { background-color: #f4f9f1; border-color: #c5e1a5; }
         .stat-box.reste-box .stat-number { color: var(--success); }
 
-        .progress-container { background-color: #e2dcd0; border-radius: 30px; height: 50px; width: 100%; position: relative; overflow: hidden; }
+        .progress-container { background-color: #e2dcd0; border-radius: 30px; height: 45px; width: 100%; position: relative; overflow: hidden; }
         .progress-bar { background: linear-gradient(90deg, var(--primary), var(--accent)); height: 100%; width: 0%; border-radius: 30px; transition: width 0.8s ease; }
-        .progress-text { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; font-weight: 700; }
+        .progress-text { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; font-weight: 700; }
 
-        .admin-controls-inline { display: none; justify-content: center; gap: 15px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #dfd3bf; }
-        .btn-admin-action { border: none; padding: 12px 24px; font-size: 1.05rem; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        .admin-controls-inline { display: none; justify-content: center; gap: 15px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #dfd3bf; }
+        .btn-admin-action { border: none; padding: 10px 20px; font-size: 1rem; font-weight: 700; border-radius: 8px; cursor: pointer; }
         .btn-plus { background-color: var(--success); color: white; }
-        .btn-saisie { background-color: var(--secondary); color: white; }
+        .btn-saisie { background-color: #8c6239; color: white; }
         .btn-obj { background-color: #cfd8dc; color: #263238; }
         .btn-delete-giant { background-color: var(--danger); color: white; }
 
-        .nav-controls { position: absolute; bottom: 25px; width: 96%; left: 2%; display: flex; justify-content: space-between; pointer-events: none; }
-        .btn-nav { background: var(--primary); color: white; border: none; padding: 12px 24px; font-size: 1.1rem; font-weight: 700; border-radius: 12px; cursor: pointer; pointer-events: auto; }
+        .nav-controls { position: absolute; bottom: 40px; width: 94%; left: 3%; display: flex; justify-content: space-between; pointer-events: none; }
+        .btn-nav { background: var(--primary); color: white; border: none; padding: 10px 20px; font-size: 1rem; font-weight: 700; border-radius: 8px; cursor: pointer; pointer-events: auto; }
         
-        #admin-kamil-box-actions { display: none; margin-top: 12px; }
-        .image-container-kamil { margin-top: 20px; text-align: center; flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 12px; width: 100%; border: 1px solid #dfd3bf; }
-        .image-container-kamil img { width: 100%; height: 100%; min-height: 250px; object-fit: cover; }
+        #admin-kamil-box-actions { display: none; margin-top: 10px; }
+        .image-container-kamil { margin-top: 15px; text-align: center; flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 10px; width: 100%; border: 1px solid var(--accent); }
+        .image-container-kamil img { width: 100%; height: 100%; object-fit: cover; }
     </style>
 
     <script>
@@ -527,9 +549,9 @@
                 <div class="welcome-left">
                     <div class="welcome-arabic-card">
                         <div class="welcome-arabic-text">
-                            وَقَضِّ حَوَائِجَ الَّذِينَ دَامُوا فِي خِدْمَتِي وَهَبْ لَهُمْ مَا رَامُوا<br>
+                            وَقَضِّ حَوَائِجَ الَّذِينَ دَامُوا فِي خِدْمَتِي وَهَبْ Lَهُمْ مَا رَامُوا<br>
                             وَارْزُقْهُمُ الْإِيمَانَ وَالْإِسْلَامَا وَالْفَتْحَ وَالْإِحْسَانَ وَاسْتِسْلَامَا<br>
-                            وَجَازِهِمْ عَنِّي بِالْغُفْرَانِ وَبِالْكَرَامَاتِ وَبِالرِّضْوَANِ
+                            وَجَازِهِمْ عَنِّي بِالْغُفْرَانِ وَبِالْكَرَامَاتِ وَبِالرِّضْوَانِ
                         </div>
                         <div class="welcome-translation">
                             « Et exauce les vœux de ceux qui persévèrent dans mon service ; accorde-leur ce qu'ils désirent.<br>
@@ -554,7 +576,7 @@
                     <h2>Lectures du Saint Coran</h2>
                     <div class="kamil-container">
                         <div>
-                            <span style="font-weight: 700; font-size:1.1rem; color: var(--primary); display:block;">Kamil (Coran)</span>
+                            <span style="font-weight: 700; font-size:1rem; color: var(--primary); display:block;">Kamil (Coran)</span>
                             <span class="objectif-chiffre-box">Objectif : <span id="obj-kamil">28</span></span>
                             <div class="admin-btn-grid" id="admin-kamil-box">
                                 <button class="btn-mini btn-mini-saisie" onclick="modifierSaisie('kamil', 'Coran')">Saisie</button>
@@ -565,7 +587,7 @@
                     </div>
                     
                     <div id="admin-kamil-box-actions">
-                        <button class="btn-mini-saisie" onclick="incrementerDirect('kamil')" style="width:100%; padding:12px; border-radius:8px; border:none; font-weight:bold; cursor:pointer; background-color: var(--success); color: white; box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);">+ Ajouter Kamil</button>
+                        <button class="btn-mini-saisie" onclick="incrementerDirect('kamil')" style="width:100%; padding:10px; border-radius:6px; border:none; font-weight:bold; cursor:pointer; background-color: var(--success); color: white;">+ Ajouter Kamil</button>
                     </div>
                     
                     <div class="image-container-kamil">
@@ -575,7 +597,7 @@
 
                 <div class="card-panel">
                     <h2>
-                        <span>Suivi des Lectures (Jeureudieufati Borom Touba!)</span>
+                        <span>Suivi des Lectures</span>
                         <button id="btn-add-xassida" class="btn-ajouter-xassida" onclick="ajouterNouvelleXassida()">+ Ajouter Xassida</button>
                     </h2>
                     <div class="qasaid-grid" id="dynamic-qasaid-grid"></div>
@@ -608,7 +630,7 @@
                     <button class="btn-admin-action btn-plus" onclick="adminPlusOneGiant()">+ 1 Récité</button>
                     <button class="btn-admin-action btn-saisie" onclick="adminModifierSaisieGiant()">Saisie Manuelle</button>
                     <button class="btn-admin-action btn-obj" onclick="adminModifierObjectifGiant()">Modifier Objectif</button>
-                    <button class="btn-admin-action btn-delete-giant" id="btn-delete-giant" onclick="adminSupprimerGiant()" style="display:none;"><i class="fas fa-trash-alt"></i> Supprimer la Xassida</button>
+                    <button class="btn-admin-action btn-delete-giant" id="btn-delete-giant" onclick="adminSupprimerGiant()" style="display:none;"><i class="fas fa-trash-alt"></i> Supprimer</button>
                 </div>
             </div>
             <div class="nav-controls">
