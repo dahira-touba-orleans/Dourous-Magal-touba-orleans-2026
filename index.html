@@ -15,7 +15,7 @@
             --primary-light: #fdfbf7; 
             --secondary: #8c6239;     
             --accent: #d9a05b;        
-            --dark: #261c14;          
+            --dark: #3d2a19;          /* Marron chaud plus adapté au lieu du noir */
             --success: #2e7d32;       
             --danger: #c62828;        
         }
@@ -89,7 +89,7 @@
 
         #view-accueil { 
             display: none; 
-            background-color: #261c14; 
+            background-color: #2b1d11; 
             position: relative;
             padding: 0;
             flex-direction: column;
@@ -102,28 +102,27 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
         }
 
         .full-poster {
             width: 100%;
             height: 100%;
-            object-fit: cover; 
-            object-position: center;
+            object-fit: contain; /* Correction pour ne plus cacher le visage ou couper l'image */
         }
 
         .overlay-arabic-message {
             position: absolute;
-            top: 20px;
+            top: 25px;
             left: 5%;
             right: 5%;
-            background: rgba(38, 28, 20, 0.85); 
+            background: rgba(75, 54, 33, 0.9); /* Marron chaud translucide */
             color: #fdfbf7;
-            padding: 12px 25px;
+            padding: 15px 25px;
             border-radius: 10px;
             text-align: center;
-            font-size: 2rem; 
+            font-size: 2.2rem; 
             font-weight: bold;
             border: 2px solid var(--accent);
             box-shadow: 0 6px 20px rgba(0,0,0,0.4);
@@ -134,7 +133,7 @@
 
         .overlay-dourous-info {
             position: absolute;
-            bottom: 40px;
+            bottom: 30px;
             left: 5%;
             right: 5%;
             background: linear-gradient(135deg, var(--primary), var(--dark));
@@ -517,7 +516,8 @@
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
-            dbRef = firebase.database().ref("compteurs");
+            // CORRECTION ICI : Liaison avec "compteurs_magal" comme vu sur ta capture d'écran Firebase
+            dbRef = firebase.database().ref("compteurs_magal");
 
             buildGridHTMLStructure();
             applyAdminVisibility();
@@ -558,7 +558,7 @@
         <div id="view-accueil" class="view-section active">
             <div class="poster-container">
                 <div class="overlay-arabic-message">
-                    وقض حوائج الذين داموا &nbsp; فِي khidmātī wa-hab lahum mā rāmū
+                    وَقَضِّ حَوَائِجَ الَّذِينَ دَامُوا فِي خِدْمَتِي وَهَبْ لَهُمْ مَا رَامُوا
                 </div>
                 
                 <div class="overlay-dourous-info">
