@@ -12,7 +12,7 @@
     
     <style>
         html, body {
-            background-color: #e6d5b8 !important; /* Vrai beige de fond, distinct du blanc */
+            background-color: #e6d5b8 !important;
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
             padding: 0;
@@ -24,8 +24,8 @@
             color: #4a2c11 !important;
         }
         .zikr-card {
-            background-color: #f3ebd9 !important; /* Beige légèrement plus doux pour le corps de la carte */
-            border: 2px solid #d7c099 !important; /* Bordure beige marquée */
+            background-color: #f3ebd9 !important;
+            border: 2px solid #d7c099 !important;
             box-shadow: 0 4px 15px -3px rgba(92, 36, 7, 0.1);
         }
         .bg-accueil-pleine-page {
@@ -57,11 +57,8 @@
             <button onclick="changerOnglet('compteurs')" id="btn-onglet-compteurs" class="bg-[#7c320c] text-[#e6d5b8] hover:bg-[#5c2407] px-6 py-2.5 rounded-xl text-xs font-bold transition-all border border-[#5c2407] tracking-wider shadow-md">
                 <i class="fas fa-beads me-1.5"></i> COMPTEURS
             </button>
-            <button onclick="ouvrirAjouterZikr()" id="btn-admin-ajout" class="hidden bg-[#d7c099] hover:bg-[#7c320c] text-[#4a2c11] px-6 py-2.5 rounded-xl text-xs font-bold transition-all border border-[#5c2407] shadow-md tracking-wider">
-                <i class="fas fa-plus me-1.5"></i> NOUVEAU ZIKR
-            </button>
             <button onclick="reinitialiserToutLeMagal()" id="btn-admin-reset" class="hidden bg-red-700 hover:bg-red-800 text-white px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md tracking-wider uppercase">
-                <i class="fas fa-trash-alt me-1.5"></i> Réinitialiser à 0
+                <i class="fas fa-trash-alt me-1.5"></i> Réinitialiser Tout à 0
             </button>
         </div>
     </header>
@@ -101,30 +98,6 @@
         <p>Jëreëjëfati Bōrom Touba • © Daara Touba Orléans 2026</p>
     </footer>
 
-    <div id="modal-ajout" class="fixed inset-0 bg-[#5c2407]/80 hidden items-center justify-center p-4 z-50 backdrop-blur-sm">
-        <div class="bg-[#f3ebd9] rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#d7c099]">
-            <h3 class="text-lg font-bold text-[#4a2c11] mb-4 border-b border-[#d7c099] pb-2 flex items-center"><i class="fas fa-beads me-2 text-[#7c320c]"></i> Ajouter un zikr (Admin)</h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-[#4a2c11] uppercase tracking-wider mb-1">Nom du Zikr</label>
-                    <input type="text" id="nouveau-nom" class="w-full border border-[#d7c099] rounded-xl p-3 text-sm focus:border-[#7c320c] outline-none bg-white text-[#4a2c11]">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-[#4a2c11] uppercase tracking-wider mb-1">Texte / Description</label>
-                    <textarea id="nouveau-texte" class="w-full border border-[#d7c099] rounded-xl p-3 text-sm focus:border-[#7c320c] outline-none h-32 custom-scroll bg-white text-[#4a2c11]"></textarea>
-                </div>
-                <div class="flex items-center">
-                    <input type="checkbox" id="nouveau-est-salat" class="w-4 h-4 text-[#7c320c] border-[#d7c099] rounded focus:ring-[#7c320c]">
-                    <label for="nouveau-est-salat" class="ms-2 text-xs font-bold text-[#4a2c11] uppercase tracking-wider">Ce zikr est une Salat al-Nabi</label>
-                </div>
-            </div>
-            <div class="flex justify-end space-x-3 mt-6">
-                <button onclick="fermerAjouterZikr()" class="px-4 py-2 text-xs font-bold text-[#7c320c] hover:text-[#5c2407] uppercase">Annuler</button>
-                <button onclick="confirmerAjouterZikr()" class="px-5 py-2 bg-[#7c320c] text-[#e6d5b8] text-xs font-bold rounded-xl shadow-md uppercase">Confirmer</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const firebaseConfig = {
             databaseURL: "https://dahira-touba-orleans-default-rtdb.europe-west1.firebasedatabase.app/" 
@@ -154,7 +127,7 @@
                 id: 11, 
                 nom: "Salatoul Fatiha", 
                 estSalat: true,
-                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَىٰ آلِهِ حَقَّ qَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-[#d7c099]'><p class='text-[11px] text-[#4a2c11] text-left font-bold font-sans bg-[#e6d5b8]/70 p-2.5 rounded-lg border border-[#d7c099]/50 leading-relaxed'>Allahoumma salli 'ala sayyidina Muhammadinil fatihi lima ougliqa wal khatimi lima sabaqa naciril haqqi bil haqqi wal hadi ila ciratikal moustaqimi wa 'ala alihi haqqa qadrihi wa miqdarihil 'azim.</p></div>", 
+                texte: "<div class='custom-scroll max-h-52 overflow-y-auto px-1'><span class='arabic-text text-2xl font-bold block text-center mb-3 leading-relaxed' dir='rtl'>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ الْفَاتِحِ لِمَا أُغْلِقَ وَالْخَاتِمِ لِمَا سَبَقَ نَاصِرِ الْحَقِّ بِالْحَقِّ وَالْهَادِي إِلَىٰ صِرَاطِكَ الْمُسْتَقِيمِ وَعَلَىٰ آلِهِ حَقَّ قَدْرِهِ وَمِقْدَارِهِ الْعَظِيمِ</span><hr class='my-2.5 border-[#d7c099]'><p class='text-[11px] text-[#4a2c11] text-left font-bold font-sans bg-[#e6d5b8]/70 p-2.5 rounded-lg border border-[#d7c099]/50 leading-relaxed'>Allahoumma salli 'ala sayyidina Muhammadinil fatihi lima ougliqa wal khatimi lima sabaqa naciril haqqi bil haqqi wal hadi ila ciratikal moustaqimi wa 'ala alihi haqqa qadrihi wa miqdarihil 'azim.</p></div>", 
                 compteur: 0 
             },
             { 
@@ -166,7 +139,7 @@
             }
         ];
 
-        let zikrs = [];
+        let zikrsActuels = [];
         let localCounts = {}; 
         let modeAdminActif = false;
         let clicsTitre = 0;
@@ -229,37 +202,33 @@
             initialisationFaite = true;
         }
 
-        db.ref('zikrs').on('value', (snapshot) => {
+        // Branchement Firebase propre basé sur les ID uniques pour écouter en temps réel
+        db.ref('compteurs_magal').on('value', (snapshot) => {
             if (!initialisationFaite) injecterCartesUneFois();
             
-            const data = snapshot.val();
-            if (!data) {
-                db.ref('zikrs').set(zikrsParDefaut);
-                zikrs = zikrsParDefaut;
-            } else {
-                let listeFirebase = Object.values(data);
-                zikrs = zikrsParDefaut.map(defaut => {
-                    const existant = listeFirebase.find(f => f.id === defaut.id || f.nom === defaut.nom);
-                    return {
-                        id: defaut.id,
-                        nom: defaut.nom,
-                        estSalat: defaut.estSalat,
-                        texte: defaut.texte, 
-                        compteur: existant ? existant.compteur : 0 
-                    };
-                });
-            }
+            const data = snapshot.val() || {};
+            zikrsActuels = zikrsParDefaut.map(defaut => {
+                return {
+                    ...defaut,
+                    compteur: data[defaut.id] !== undefined ? data[defaut.id] : 0
+                };
+            });
+            
             mettreAJourChiffresSilencieusement();
         });
 
         function mettreAJourChiffresSilencieusement() {
-            zikrs.forEach(zikr => {
+            let totalSalat = 0;
+            zikrsActuels.forEach(zikr => {
                 const elGlobal = document.getElementById(`global-text-${zikr.id}`);
                 if (elGlobal) {
                     elGlobal.innerText = zikr.compteur.toLocaleString();
                 }
+                if (zikr.estSalat) {
+                    totalSalat += zikr.compteur;
+                }
             });
-            calculerTotalSalat();
+            document.getElementById('compteur-global-salat').innerText = totalSalat.toLocaleString();
         }
 
         function gererClicPlusUn(id, estSalat) {
@@ -267,6 +236,7 @@
             document.getElementById(`local-text-${id}`).innerText = localCounts[id];
             
             if (!estSalat) {
+                // Incrémentation instantanée sur l'écran pour les Zikrs classiques
                 modifierValeurFirebase(id, 1);
             } else {
                 let btn = document.getElementById(`btn-envoyer-${id}`);
@@ -303,13 +273,10 @@
         }
 
         function modifierValeurFirebase(id, delta) {
-            const index = zikrs.findIndex(z => z.id === id);
-            if (index !== -1) {
-                db.ref('zikrs/' + index + '/compteur').transaction((valeurActuelle) => {
-                    let nouveauTotal = (valeurActuelle || 0) + delta;
-                    return nouveauTotal < 0 ? 0 : nouveauTotal;
-                });
-            }
+            db.ref('compteurs_magal/' + id).transaction((valeurActuelle) => {
+                let nouveauTotal = (valeurActuelle || 0) + delta;
+                return nouveauTotal < 0 ? 0 : nouveauTotal;
+            });
         }
 
         function reinitialiserLocal(id) {
@@ -326,28 +293,26 @@
             clicsTitre++;
             if (clicsTitre === 3) {
                 modeAdminActif = true;
-                document.getElementById('btn-admin-ajout').classList.remove('hidden');
                 document.getElementById('btn-admin-reset').classList.remove('hidden');
-                alert("🔒 Espace Administration activé ! Le bouton de remise à zéro générale est visible en haut.");
+                alert("🔒 Espace Administration activé ! Le bouton rouge de remise à zéro totale est disponible en haut.");
                 clicsTitre = 0;
             }
             setTimeout(() => { clicsTitre = 0; }, 2000);
         }
 
+        // Nettoyage complet et forcé de tout le nœud Firebase
         function reinitialiserToutLeMagal() {
-            if (confirm("⚠️ ATTENTION : Es-tu sûr de vouloir effacer le total collectif de tous les zikrs et salats pour démarrer le Magal à zéro ?")) {
-                db.ref('zikrs').set(zikrsParDefaut.map(z => ({ ...z, compteur: 0 })))
+            if (confirm("⚠️ ATTENTION : Es-tu sûr à 100% de vouloir nettoyer TOUTE la base de données ? Cela va forcer le grand total général et chaque compteur à repasser immédiatement à 0.")) {
+                const objetInitialise = {};
+                zikrsParDefaut.forEach(z => {
+                    objetInitialise[z.id] = 0;
+                });
+                
+                db.ref('compteurs_magal').set(objetInitialise)
                 .then(() => {
-                    alert("✅ Tous les compteurs collectifs ont été remis à 0 avec succès !");
+                    alert("✅ Base nettoyée ! Absolument tous les totaux collectifs sont revenus à zéro.");
                 });
             }
-        }
-
-        function calculerTotalSalat() {
-            const total = zikrs
-                .filter(z => z.estSalat === true)
-                .reduce((somme, zikr) => somme + zikr.compteur, 0);
-            document.getElementById('compteur-global-salat').innerText = total.toLocaleString();
         }
 
         function changerOnglet(onglet) {
@@ -368,7 +333,6 @@
                 secCompteurs.classList.remove('hidden');
                 btnAccueil.className = "bg-[#7c320c] text-[#e6d5b8] hover:bg-[#5c2407] px-6 py-2.5 rounded-xl text-xs font-bold transition-all border border-[#5c2407] tracking-wider shadow-md";
                 btnCompteurs.className = "bg-[#d7c099] text-[#4a2c11] px-6 py-2.5 rounded-xl text-xs font-bold transition-all border border-[#c8af88] tracking-wider shadow-md";
-                calculerTotalSalat();
             }
         }
     </script>
