@@ -7,6 +7,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
@@ -131,6 +132,34 @@
             z-index: 10;
         }
 
+        .overlay-dourous-info {
+            position: absolute;
+            bottom: 40px;
+            left: 5%;
+            right: 5%;
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: #fdfbf7;
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--accent);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .overlay-dourous-info h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+        .overlay-dourous-info p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #fcfaf2;
+        }
+
         .grid-layout {
             display: grid; grid-template-columns: 1fr 1.8fr; gap: 15px; height: 100%;
         }
@@ -178,6 +207,7 @@
         .btn-mini { border: none; padding: 3px 6px; font-size: 0.75rem; font-weight: bold; cursor: pointer; border-radius: 4px; }
         .btn-mini-saisie { background-color: var(--secondary); color: white; }
         .btn-mini-obj { background-color: #e2e8f0; color: #4a5568; }
+        .btn-mini-delete { background-color: var(--danger); color: white; }
         
         .btn-action-rep {
             display: none; color: white; border-radius: 50%; width: 32px; height: 32px; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer; border: none; font-weight: bold;
@@ -209,6 +239,7 @@
         .btn-plus { background-color: #2e7d32; color: white; }
         .btn-saisie { background-color: var(--secondary); color: white; }
         .btn-obj { background-color: #cfd8dc; color: #263238; }
+        .btn-delete-giant { background-color: var(--danger); color: white; }
 
         .nav-controls { position: absolute; bottom: 20px; width: 96%; left: 2%; display: flex; justify-content: space-between; pointer-events: none; }
         .btn-nav { background: var(--primary); color: white; border: none; padding: 10px 20px; font-size: 1.2rem; font-weight: bold; border-radius: 10px; cursor: pointer; pointer-events: auto; }
@@ -224,11 +255,10 @@
     </style>
 
     <script>
-        // Configuration Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBD9ko00MvYxp-IyLlmmWArEvIdm2ouXj8",
             authDomain: "magal-e1fc2.firebaseapp.com",
-            databaseURL: "https://magal-e1fc2-default-rtdb.europe-west1.firebasedatabase.app/", // URL corrigée de votre base Realtime
+            databaseURL: "https://magal-e1fc2-default-rtdb.europe-west1.firebasedatabase.app/",
             projectId: "magal-e1fc2",
             storageBucket: "magal-e1fc2.firebasestorage.app",
             messagingSenderId: "724650850502",
@@ -304,13 +334,14 @@
                 const defaultObjective = getDefaultObj(x.id);
 
                 const itemHTML = `
-                    <div class="qasaid-item">
+                    <div class="qasaid-item" id="item-block-${x.id}">
                         <div>
                             <h3>${x.nom}</h3>
                             <span class="objectif-chiffre-box">Objectif : <span id="grid-obj-${x.id}">${formatNumber(defaultObjective)}</span></span>
                             <div class="admin-btn-grid" style="display: ${displayStyle}">
                                 <button class="btn-mini btn-mini-saisie" onclick="modifierSaisie('${x.id}', '${x.nom.replace(/'/g, "\\'")}')">Saisie</button>
                                 <button class="btn-mini btn-mini-obj" onclick="modifierObjectif('${x.id}', '${x.nom.replace(/'/g, "\\'")}')">Obj</button>
+                                <button class="btn-mini btn-mini-delete" onclick="supprimerXassida('${x.id}', '${x.nom.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Suppr.</button>
                             </div>
                         </div>
                         <div class="counter-box">
@@ -326,13 +357,11 @@
         function renderAll() {
             if (!globalData) globalData = {};
 
-            // Synchronisation Kamil
             const kamilLu = parseInt(globalData.kamil) || 0;
             const kamilObj = parseInt(globalData.obj_kamil) || 28;
             if(document.getElementById("kamil-val")) document.getElementById("kamil-val").innerText = formatNumber(kamilLu);
             if(document.getElementById("obj-kamil")) document.getElementById("obj-kamil").innerText = formatNumber(kamilObj);
 
-            // Synchronisation de la grille
             xassidas.forEach(x => {
                 if(x.id === 'kamil') return;
                 const lu = parseInt(globalData[x.id]) || 0;
@@ -345,7 +374,6 @@
                 if(objElem) objElem.innerText = formatNumber(obj);
             });
 
-            // Synchronisation de la vue Géante
             if (xassidas.length > 0) {
                 if (currentIndex >= xassidas.length) currentIndex = 0;
                 const current = xassidas[currentIndex];
@@ -365,6 +393,15 @@
                 if(document.getElementById("val-reste")) document.getElementById("val-reste").innerText = formatNumber(resteGiant);
                 if(document.getElementById("progress-bar")) document.getElementById("progress-bar").style.width = pourcentGiant + "%";
                 if(document.getElementById("progress-text")) document.getElementById("progress-text").innerText = pourcentGiant + "% Accomplis";
+                
+                const btnDelGiant = document.getElementById("btn-delete-giant");
+                if (btnDelGiant) {
+                    if (isAdminActive && current.id !== 'kamil') {
+                        btnDelGiant.style.display = "block";
+                    } else {
+                        btnDelGiant.style.display = "none";
+                    }
+                }
             }
         }
 
@@ -392,20 +429,14 @@
             renderAll();
         };
 
-        // INCRÉMENTATION DIRECTE SANS FENÊTRE POP-UP (+1 AUTOMATIQUE)
         window.incrementerDirect = function(id) {
             const actuel = parseInt(globalData[id]) || 0;
             const nouvelleValeur = actuel + 1;
-            
-            // Écriture directe forcée dans le noeud
             dbRef.child(id).set(nouvelleValeur, (error) => {
-                if (error) {
-                    alert("ERREUR D'ÉCRITURE : " + error.message + "\nAssurez-vous d'avoir publié des règles publiques (.write: true) sur Firebase.");
-                }
+                if (error) alert("ERREUR D'ÉCRITURE : " + error.message);
             });
         };
 
-        // SAISIE MANUELLE (Affiche la fenêtre pop-up de saisie ici uniquement)
         window.modifierSaisie = function(id, nom) {
             const actuel = parseInt(globalData[id]) || 0;
             const nouveau = prompt(`Saisir manuellement le nombre total pour ${nom} :`, actuel);
@@ -417,7 +448,6 @@
             }
         };
 
-        // MODIFIER L'OBJECTIF
         window.modifierObjectif = function(id, nom) {
             const dbKey = (id === 'kamil') ? 'obj_kamil' : `obj_${id}`;
             const actuelObj = globalData[dbKey] !== undefined ? parseInt(globalData[dbKey]) : getDefaultObj(id);
@@ -427,6 +457,24 @@
                 dbRef.child(dbKey).set(valeurNum, (error) => {
                     if (error) alert("ERREUR OBJECTIF : " + error.message);
                 });
+            }
+        };
+
+        window.supprimerXassida = function(id, nom) {
+            if (id === 'kamil') {
+                alert("Impossible de supprimer la section principale du Coran.");
+                return;
+            }
+            if (confirm(`⚠️ Es-tu sûr de vouloir supprimer définitivement "${nom}" ?\nCette action l'effacera de la liste et de la base Firebase.`)) {
+                xassidas = xassidas.filter(item => item.id !== id);
+                dbRef.child('_liste_structure').set(xassidas);
+                dbRef.child(id).remove();
+                dbRef.child(`obj_${id}`).remove();
+                
+                alert(`✅ "${nom}" a bien été retirée.`);
+                buildGridHTMLStructure();
+                applyAdminVisibility();
+                renderAll();
             }
         };
 
@@ -461,6 +509,7 @@
         };
         window.adminModifierSaisieGiant = function() { modifierSaisie(xassidas[currentIndex].id, xassidas[currentIndex].nom); };
         window.adminModifierObjectifGiant = function() { modifierObjectif(xassidas[currentIndex].id, xassidas[currentIndex].nom); };
+        window.adminSupprimerGiant = function() { supprimerXassida(xassidas[currentIndex].id, xassidas[currentIndex].nom); };
 
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminStatus();
@@ -473,7 +522,6 @@
             buildGridHTMLStructure();
             applyAdminVisibility();
 
-            // Écoute des changements en temps réel
             dbRef.on("value", (snapshot) => {
                 globalData = snapshot.val() || {};
                 
@@ -486,7 +534,7 @@
                 }
                 renderAll();
             }, (error) => {
-                alert("ERREUR CONNEXION FIREBASE : " + error.message + "\nVérifiez vos règles d'accès.");
+                alert("ERREUR CONNEXION FIREBASE : " + error.message);
             });
         });
     </script>
@@ -510,8 +558,14 @@
         <div id="view-accueil" class="view-section active">
             <div class="poster-container">
                 <div class="overlay-arabic-message">
-                    وقض حوائج الذين داموا &nbsp; فِي خِدْمَتِي وَهَبْ لَهُمْ مَا رَامُوا
+                    وقض حوائج الذين داموا &nbsp; فِي khidmātī wa-hab lahum mā rāmū
                 </div>
+                
+                <div class="overlay-dourous-info">
+                    <h2>Suivi des Dourous & des Kamils</h2>
+                    <p>Organisation Générale des Lectures du Saint Coran et des Khassidas • Édition 2026</p>
+                </div>
+
                 <img src="photo-magal.jpeg" alt="Affiche Grand Magal" class="full-poster">
             </div>
         </div>
@@ -576,6 +630,7 @@
                     <button class="btn-admin-action btn-plus" onclick="adminPlusOneGiant()">+ 1 Récité</button>
                     <button class="btn-admin-action btn-saisie" onclick="adminModifierSaisieGiant()">Saisie Manuelle</button>
                     <button class="btn-admin-action btn-obj" onclick="adminModifierObjectifGiant()">Modifier Objectif</button>
+                    <button class="btn-admin-action btn-delete-giant" id="btn-delete-giant" onclick="adminSupprimerGiant()" style="display:none;"><i class="fas fa-trash-alt"></i> Supprimer la Xassida</button>
                 </div>
             </div>
             <div class="nav-controls">
